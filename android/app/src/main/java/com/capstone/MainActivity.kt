@@ -1,5 +1,16 @@
 package com.capstone
 
+import android.car.Car
+import android.content.ContentValues
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
+import androidx.car.app.CarContext
+import androidx.car.app.hardware.CarHardwareManager
+import androidx.car.app.hardware.common.CarValue
+import androidx.car.app.hardware.common.OnCarDataAvailableListener
+import androidx.car.app.hardware.info.CarSensors
+import androidx.car.app.hardware.info.Compass
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.concurrentReactEnabled
@@ -28,4 +39,40 @@ class MainActivity : ReactActivity() {
             concurrentReactEnabled // concurrentRootEnabled
         )
     }
+
+    private lateinit var carContext: CarContext
+
+    @RequiresApi(Build.VERSION_CODES.P)
+    private fun watchSpeedSensor() {
+        val carSensors = carContext.getCarService(CarHardwareManager::class.java).carSensors
+
+        val listener = OnCarDataAvailableListener<Compass> { data ->
+            if (data.orientations.status == CarValue.STATUS_SUCCESS) {
+                val orientation = data.orientations.value
+                Log.d(ContentValues.TAG, "onGetTemplate: Compass status = $orientation")
+            } else {
+                // Data not available, handle error
+            }
+        }
+        carSensors.addCompassListener(
+            CarSensors.UPDATE_RATE_NORMAL,
+            carContext.mainExecutor,
+            listener
+        )
+
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

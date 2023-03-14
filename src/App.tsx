@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import HelloModule from './modules/HelloModule';
+// import HelloModule from './modules/HelloModule';
 import type { PropsWithChildren } from 'react';
 // import { Screen, ScreenManager } from "react-native-android-auto";
 // import { AppRegistry } from "react-native";
@@ -20,8 +20,8 @@ import {
   Text,
   useColorScheme,
   View,
-  Platform
-  // NativeModules
+  Platform,
+  NativeModules
 } from 'react-native';
 
 import {
@@ -64,7 +64,7 @@ function Section({ children, title }: SectionProps): JSX.Element {
 
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
-  // const { HelloModule } = NativeModules;
+  const { AndroidAutoModule } = NativeModules;
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -72,8 +72,11 @@ function App(): JSX.Element {
   const onPress = () => {
     console.log('pressed');
     // const { HelloModule } = ReactNative.NativeModules;
-    if(Platform.OS == "android") {
-      HelloModule.createHello('Hello World!');
+    // if(Platform.OS == "android") {
+    //   HelloModule.createHello('Hello World!');
+    // }
+    if (Platform.OS == "android") {
+      AndroidAutoModule.createHello('Hello World!');
     }
   }
 
